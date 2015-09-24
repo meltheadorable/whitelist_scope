@@ -9,4 +9,5 @@ spec/dummy/.sass-cache
 bin/
 .DS_Store
 gemfiles/*.lock
+coverage/
 coverage/**/*

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    whitelist_scope (0.1.0)
+    whitelist_scope (0.1.2)
       activerecord (>= 3.2.0)
 
 GEM

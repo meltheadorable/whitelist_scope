@@ -8,6 +8,10 @@ ActiveRecord::Schema.define do
     t.string :name
     t.datetime "created_at",  null: false
   end
+  create_table :combinable_scopes, force: true do |t|
+    t.boolean :pending, null: false, default: false
+    t.boolean :featured, null: false, default: false
+  end
 end
 
 class SortableItem < ActiveRecord::Base
@@ -21,6 +25,13 @@ class ItemWithBadDefault < ActiveRecord::Base
   extend WhitelistScope
 
   whitelist_scope :something_here, -> { order(:created_at) }
+end
+
+class CombinableScopes < ActiveRecord::Base
+  extend WhitelistScope
+
+  whitelist_scope :pending, -> { where(pending: true) }
+  whitelist_scope :featured, -> {where(featured: true) }
 end
 
 describe WhitelistScope do
@@ -59,4 +70,24 @@ describe WhitelistScope do
     end
   end
 
+  context "combinable scopes" do
+    before(:each) do
+      @item1 = CombinableScopes.create(pending: true)
+      @item2 = CombinableScopes.create(featured: true)
+      @item3 = CombinableScopes.create(pending: true, featured: true)
+    end
+
+    after(:each) do
+      CombinableScopes.destroy_all
+    end
+
+    it 'should allow calling multiple scopes' do
+      @pending = CombinableScopes.call_whitelisted_scope("pending")
+      @featured = CombinableScopes.call_whitelisted_scope("featured")
+      @pending_and_featured = CombinableScopes.call_whitelisted_scope("pending", "featured")
+      expect(@pending.count).to eq 2
+      expect(@featured.count).to eq 2
+      expect(@pending_and_featured.count).to eq 1
+    end
+  end
 end

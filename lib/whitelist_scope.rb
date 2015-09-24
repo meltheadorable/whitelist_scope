@@ -15,13 +15,22 @@ module WhitelistScope
     @whitelist << name
   end
 
-  def call_whitelisted_scope(scope_name = "")
-    scope_name = scope_name.to_sym unless scope_name == nil
+  def call_whitelisted_scope(*scope_names)
+    scope_results = nil
 
-    if @whitelist.include? scope_name
-      self.send(scope_name)
-    else
-      raise NoMethodError, "The scope you provided, '#{scope_name}', does not exist."
+    scope_names.flatten.each do |scope_name|
+      scope_name = scope_name.to_sym unless scope_name == nil
+
+      if @whitelist.include? scope_name
+        if scope_results
+          scope_results = scope_results.send(scope_name)
+        else
+          scope_results = self.send(scope_name)
+        end
+      else
+        raise NoMethodError, "The scope you provided, '#{scope_name}', does not exist."
+      end
     end
+    scope_results
   end
 end

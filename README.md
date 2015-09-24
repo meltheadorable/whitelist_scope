@@ -36,6 +36,8 @@ class Item < ActiveRecord::Base
 
   whitelist_scope :most_recent, -> { order(updated_at: :desc) }
   whitelist_scope :created_first, -> { order(created_at: :asc) }
+  whitelist_scope :approved, -> { where(approved: true) }
+  whitelist_scope :featured, -> { where(featured: true) }
 end
 ```
 
@@ -54,6 +56,7 @@ class ItemController < ApplicationController
   def index
     @items = Item.call_whitelisted_scope("most_recent") # sorts your items by most recent
     @others = Item.call_whitelisted_scope(params[:sort]) # sorts by the method specified in the params
+    @approved_features = Item.call_whitelisted_scope("approved", "featured") # call multiple at once
   end
 end
 ```

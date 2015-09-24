@@ -87,7 +87,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal
-  bundler (~> 1.10)
+  bundler (~> 1.0)
   coveralls
   fuubar
   rake (~> 10.0)

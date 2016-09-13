@@ -1,7 +1,7 @@
-require 'active_record'
-require 'whitelist_scope'
+require "active_record"
+require "whitelist_scope"
 
-ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
+ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 
 ActiveRecord::Schema.define do
   create_table :sortable_items, force: true do |t|
@@ -31,7 +31,7 @@ class CombinableScopes < ActiveRecord::Base
   extend WhitelistScope
 
   whitelist_scope :pending, -> { where(pending: true) }
-  whitelist_scope :featured, -> {where(featured: true) }
+  whitelist_scope :featured, -> { where(featured: true) }
 end
 
 describe WhitelistScope do
@@ -40,17 +40,18 @@ describe WhitelistScope do
   end
 
   it "should raise an error when the scope doesn't exist" do
-    expect{ SortableItem.call_whitelisted_scope("fake_option") }.to raise_error "The scope you provided, 'fake_option', does not exist."
+    expect { SortableItem.call_whitelisted_scope("fake_option") }
+      .to raise_error "The scope you provided, 'fake_option', does not exist."
   end
 
   it "should raise an argument error when an invalid scope is specified" do
-    expect{
+    expect do
       class BrokenSortOption < ActiveRecord::Base
         extend WhitelistScope
 
         whitelist_scope :destroy, -> { order("created_at ASC") }
       end
-    }.to raise_error ArgumentError
+    end.to raise_error ArgumentError
   end
 
   context "sorting scopes" do
@@ -81,7 +82,7 @@ describe WhitelistScope do
       CombinableScopes.destroy_all
     end
 
-    it 'should allow calling multiple scopes' do
+    it "should allow calling multiple scopes" do
       @pending = CombinableScopes.call_whitelisted_scope("pending")
       @featured = CombinableScopes.call_whitelisted_scope("featured")
       @pending_and_featured = CombinableScopes.call_whitelisted_scope("pending", "featured")

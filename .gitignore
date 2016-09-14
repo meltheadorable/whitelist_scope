@@ -11,3 +11,4 @@ bin/
 gemfiles/*.lock
 coverage/
 coverage/**/*
+.ruby-version

@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'whitelist_scope/version'
+require "whitelist_scope/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "whitelist_scope"
@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rubocop", "~> 0.42.0"
   spec.add_development_dependency "fuubar"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "appraisal"
